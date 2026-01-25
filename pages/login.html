@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Đăng nhập vào OTO VIỆT để quản lý tài khoản và theo dõi đơn hàng của bạn.">
+    <title>Đăng Nhập - OTO VIỆT</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+    <div class="auth-page">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <a href="/" class="auth-logo">
+                        <div class="logo-icon">🚗</div>
+                        <span>OTO VIỆT</span>
+                    </a>
+                    <h1 class="auth-title">Chào mừng trở lại!</h1>
+                    <p class="auth-subtitle">Đăng nhập để tiếp tục mua sắm</p>
+                </div>
+
+                <!-- Alert Message -->
+                <div id="alertMessage" class="alert" style="display: none;"></div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" class="form-input" placeholder="Nhập email của bạn" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Mật khẩu</label>
+                        <input type="password" id="password" class="form-input" placeholder="Nhập mật khẩu" required
+                            minlength="6">
+                    </div>
+
+                    <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
+                        <label class="form-checkbox">
+                            <input type="checkbox" id="rememberMe">
+                            <span>Ghi nhớ đăng nhập</span>
+                        </label>
+                        <a href="#" onclick="showForgotPassword()" style="font-size: 0.875rem;">Quên mật khẩu?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-full btn-lg" id="submitBtn">
+                        Đăng nhập
+                    </button>
+                </form>
+
+                <div class="auth-footer">
+                    <p>Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a></p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <a href="/" style="color: var(--text-muted); font-size: 0.875rem;">← Quay lại trang chủ</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal-overlay" id="forgotPasswordModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Quên mật khẩu</h3>
+                <button class="modal-close" onclick="hideForgotPassword()">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    Nhập email của bạn và chúng tôi sẽ gửi link đặt lại mật khẩu.
+                </p>
+                <div class="form-group">
+                    <label for="resetEmail" class="form-label">Email</label>
+                    <input type="email" id="resetEmail" class="form-input" placeholder="Nhập email của bạn" required>
+                </div>
+                <div id="resetAlertMessage" class="alert" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideForgotPassword()">Hủy</button>
+                <button class="btn btn-primary" onclick="handleResetPassword()">Gửi link</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/auth.js"></script>
+
+    <script>
+        // Check if already logged in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                window.location.href = '/';
+            }
+        });
+
+        // Handle login form submission
+        const loginForm = document.getElementById('loginForm');
+        const alertMessage = document.getElementById('alertMessage');
+        const submitBtn = document.getElementById('submitBtn');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Đang đăng nhập...';
+
+            // Hide previous alerts
+            alertMessage.style.display = 'none';
+
+            // Attempt login
+            const result = await Auth.login(email, password);
+
+            if (result.success) {
+                alertMessage.className = 'alert alert-success';
+                alertMessage.innerHTML = '✓ Đăng nhập thành công! Đang chuyển hướng...';
+                alertMessage.style.display = 'flex';
+
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000);
+            } else {
+                alertMessage.className = 'alert alert-error';
+                alertMessage.innerHTML = '✕ ' + result.error;
+                alertMessage.style.display = 'flex';
+
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Đăng nhập';
+            }
+        });
+
+        // Forgot password functions
+        function showForgotPassword() {
+            document.getElementById('forgotPasswordModal').classList.add('active');
+        }
+
+        function hideForgotPassword() {
+            document.getElementById('forgotPasswordModal').classList.remove('active');
+            document.getElementById('resetEmail').value = '';
+            document.getElementById('resetAlertMessage').style.display = 'none';
+        }
+
+        async function handleResetPassword() {
+            const email = document.getElementById('resetEmail').value.trim();
+            const resetAlert = document.getElementById('resetAlertMessage');
+
+            if (!email) {
+                resetAlert.className = 'alert alert-error';
+                resetAlert.innerHTML = '✕ Vui lòng nhập email';
+                resetAlert.style.display = 'flex';
+                return;
+            }
+
+            const result = await Auth.resetPassword(email);
+
+            if (result.success) {
+                resetAlert.className = 'alert alert-success';
+                resetAlert.innerHTML = '✓ Link đặt lại mật khẩu đã được gửi!';
+                resetAlert.style.display = 'flex';
+
+                setTimeout(() => {
+                    hideForgotPassword();
+                }, 2000);
+            } else {
+                resetAlert.className = 'alert alert-error';
+                resetAlert.innerHTML = '✕ ' + result.error;
+                resetAlert.style.display = 'flex';
+            }
+        }
+
+        // Close modal on overlay click
+        document.getElementById('forgotPasswordModal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-overlay')) {
+                hideForgotPassword();
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán - OTO VIỆT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .checkout-page {
+            padding-top: calc(var(--header-height) + var(--spacing-2xl));
+            min-height: 100vh;
+        }
+
+        .checkout-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: var(--spacing-2xl);
+        }
+
+        .checkout-form {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+        }
+
+        .checkout-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .payment-option:hover,
+        .payment-option.selected {
+            border-color: var(--accent-primary);
+        }
+
+        .payment-option input {
+            display: none;
+        }
+
+        .payment-option .radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .payment-option.selected .radio {
+            border-color: var(--accent-primary);
+        }
+
+        .payment-option.selected .radio::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+        }
+
+        .order-items-preview {
+            margin-top: var(--spacing-lg);
+        }
+
+        .order-item-mini {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-sm) 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .order-item-mini:last-child {
+            border-bottom: none;
+        }
+
+        .order-item-mini img {
+            width: 60px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+        }
+
+        .order-item-mini-info {
+            flex: 1;
+        }
+
+        .order-item-mini-name {
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .order-item-mini-price {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        @media (max-width: 1024px) {
+            .checkout-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <a href="/" class="logo">
+                <div class="logo-icon">🚗</div><span>OTO VIỆT</span>
+            </a>
+            <div class="header-actions">
+                <a href="cart.html" class="btn btn-ghost btn-sm">← Quay lại giỏ hàng</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="checkout-page">
+        <div class="container">
+            <h1 style="margin-bottom: var(--spacing-xl);">Thanh toán</h1>
+            <div id="checkoutContent">
+                <div class="checkout-layout">
+                    <div>
+                        <div class="checkout-form">
+                            <h2 class="checkout-title">Thông tin giao hàng</h2>
+                            <div id="alertMessage" class="alert" style="display: none;"></div>
+                            <form id="checkoutForm">
+                                <div class="form-group">
+                                    <label class="form-label">Họ và tên *</label>
+                                    <input type="text" id="fullName" class="form-input" placeholder="Nhập họ và tên"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Số điện thoại *</label>
+                                    <input type="tel" id="phone" class="form-input" placeholder="Nhập số điện thoại"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Địa chỉ giao hàng *</label>
+                                    <textarea id="address" class="form-textarea" placeholder="Nhập địa chỉ chi tiết"
+                                        required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Ghi chú</label>
+                                    <textarea id="note" class="form-textarea"
+                                        placeholder="Ghi chú thêm (không bắt buộc)"></textarea>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="checkout-form" style="margin-top: var(--spacing-lg);">
+                            <h2 class="checkout-title">Phương thức thanh toán</h2>
+                            <div class="payment-options">
+                                <label class="payment-option selected" onclick="selectPayment(this, 'cash')">
+                                    <input type="radio" name="payment" value="cash" checked>
+                                    <span class="radio"></span>
+                                    <div>
+                                        <strong>💵 Thanh toán khi nhận hàng (COD)</strong>
+                                        <p style="color: var(--text-muted); font-size: 0.875rem; margin: 0;">Thanh toán
+                                            bằng tiền mặt khi nhận xe</p>
+                                    </div>
+                                </label>
+                                <label class="payment-option" onclick="selectPayment(this, 'bank')">
+                                    <input type="radio" name="payment" value="bank">
+                                    <span class="radio"></span>
+                                    <div>
+                                        <strong>🏦 Chuyển khoản ngân hàng</strong>
+                                        <p style="color: var(--text-muted); font-size: 0.875rem; margin: 0;">Chuyển
+                                            khoản trước khi giao xe</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cart-summary">
+                        <div class="summary-card">
+                            <h3 class="summary-title">Đơn hàng của bạn</h3>
+                            <div class="order-items-preview" id="orderItemsPreview"></div>
+                            <div class="summary-row" style="margin-top: var(--spacing-lg);">
+                                <span>Tạm tính</span>
+                                <span id="subtotal">0đ</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Phí vận chuyển</span>
+                                <span>Miễn phí</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Tổng cộng</span>
+                                <span class="summary-value" id="total">0đ</span>
+                            </div>
+                            <button type="button" class="btn btn-primary w-full btn-lg"
+                                style="margin-top: var(--spacing-lg);" id="submitOrderBtn" onclick="submitOrder()">
+                                Đặt hàng
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/orders.js"></script>
+    <script>
+        let selectedPayment = 'cash';
+
+        function selectPayment(el, method) {
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedPayment = method;
+        }
+
+        function renderCheckout() {
+            const items = Cart.getItems();
+            if (items.length === 0) { window.location.href = 'cart.html'; return; }
+
+            const preview = document.getElementById('orderItemsPreview');
+            preview.innerHTML = items.map(item =>
+                '<div class="order-item-mini"><img src="' + item.image + '" alt=""><div class="order-item-mini-info"><div class="order-item-mini-name">' + item.name + '</div><div class="order-item-mini-price">' + App.formatPriceFull(item.price) + ' x' + item.quantity + '</div></div></div>'
+            ).join('');
+
+            document.getElementById('subtotal').textContent = App.formatPriceFull(Cart.getTotalPrice());
+            document.getElementById('total').textContent = App.formatPriceFull(Cart.getTotalPrice());
+        }
+
+        async function submitOrder() {
+            const alertEl = document.getElementById('alertMessage');
+            const btn = document.getElementById('submitOrderBtn');
+
+            if (!Auth.isLoggedIn()) {
+                alertEl.className = 'alert alert-warning';
+                alertEl.innerHTML = '⚠️ Vui lòng đăng nhập để đặt hàng';
+                alertEl.style.display = 'flex';
+                setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+                return;
+            }
+
+            const fullName = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const note = document.getElementById('note').value.trim();
+
+            if (!fullName || !phone || !address) {
+                alertEl.className = 'alert alert-error';
+                alertEl.innerHTML = '✕ Vui lòng điền đầy đủ thông tin bắt buộc';
+                alertEl.style.display = 'flex';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Đang xử lý...';
+
+            const result = await Orders.createOrder({ fullName, phone, address, note }, selectedPayment);
+
+            if (result.success) {
+                alertEl.className = 'alert alert-success';
+                alertEl.innerHTML = '✓ Đặt hàng thành công! Mã đơn: ' + result.orderId.slice(-8).toUpperCase();
+                alertEl.style.display = 'flex';
+                setTimeout(() => { window.location.href = 'profile.html'; }, 2000);
+            } else {
+                alertEl.className = 'alert alert-error';
+                alertEl.innerHTML = '✕ ' + result.error;
+                alertEl.style.display = 'flex';
+                btn.disabled = false;
+                btn.textContent = 'Đặt hàng';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', renderCheckout);
+    </script>
+</body>
+
+</html>

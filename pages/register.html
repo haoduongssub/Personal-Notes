@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Đăng ký tài khoản OTO VIỆT để trải nghiệm mua xe dễ dàng và nhanh chóng.">
+    <title>Đăng Ký - OTO VIỆT</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+    <div class="auth-page">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <a href="/" class="auth-logo">
+                        <div class="logo-icon">🚗</div>
+                        <span>OTO VIỆT</span>
+                    </a>
+                    <h1 class="auth-title">Tạo tài khoản mới</h1>
+                    <p class="auth-subtitle">Chỉ mất vài giây để bắt đầu</p>
+                </div>
+
+                <!-- Alert Message -->
+                <div id="alertMessage" class="alert" style="display: none;"></div>
+
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="displayName" class="form-label">Họ và tên</label>
+                        <input type="text" id="displayName" class="form-input" placeholder="Nhập họ và tên của bạn"
+                            required minlength="2">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" class="form-input" placeholder="Nhập email của bạn" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Mật khẩu</label>
+                        <input type="password" id="password" class="form-input" placeholder="Tối thiểu 6 ký tự" required
+                            minlength="6">
+                        <span class="form-hint">Mật khẩu phải có ít nhất 6 ký tự</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword" class="form-label">Xác nhận mật khẩu</label>
+                        <input type="password" id="confirmPassword" class="form-input" placeholder="Nhập lại mật khẩu"
+                            required minlength="6">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-checkbox">
+                            <input type="checkbox" id="agreeTerms" required>
+                            <span>Tôi đồng ý với <a href="#">Điều khoản sử dụng</a> và <a href="#">Chính sách bảo
+                                    mật</a></span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-full btn-lg" id="submitBtn">
+                        Đăng ký
+                    </button>
+                </form>
+
+                <div class="auth-footer">
+                    <p>Đã có tài khoản? <a href="login.html">Đăng nhập</a></p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <a href="/" style="color: var(--text-muted); font-size: 0.875rem;">← Quay lại trang chủ</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/auth.js"></script>
+
+    <script>
+        // Check if already logged in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                window.location.href = '/';
+            }
+        });
+
+        // Handle register form submission
+        const registerForm = document.getElementById('registerForm');
+        const alertMessage = document.getElementById('alertMessage');
+        const submitBtn = document.getElementById('submitBtn');
+
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const displayName = document.getElementById('displayName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+
+            // Hide previous alerts
+            alertMessage.style.display = 'none';
+
+            // Validation
+            if (!displayName || displayName.length < 2) {
+                showError('Vui lòng nhập họ và tên hợp lệ');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showError('Mật khẩu xác nhận không khớp');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('Mật khẩu phải có ít nhất 6 ký tự');
+                return;
+            }
+
+            if (!agreeTerms) {
+                showError('Bạn cần đồng ý với điều khoản sử dụng');
+                return;
+            }
+
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Đang đăng ký...';
+
+            // Attempt registration
+            const result = await Auth.register(email, password, displayName);
+
+            if (result.success) {
+                alertMessage.className = 'alert alert-success';
+                alertMessage.innerHTML = '✓ Đăng ký thành công! Đang chuyển hướng...';
+                alertMessage.style.display = 'flex';
+
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1500);
+            } else {
+                showError(result.error);
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Đăng ký';
+            }
+        });
+
+        function showError(message) {
+            alertMessage.className = 'alert alert-error';
+            alertMessage.innerHTML = '✕ ' + message;
+            alertMessage.style.display = 'flex';
+        }
+
+        // Real-time password confirmation check
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+
+        confirmPassword.addEventListener('input', () => {
+            if (confirmPassword.value && confirmPassword.value !== password.value) {
+                confirmPassword.style.borderColor = 'var(--error)';
+            } else {
+                confirmPassword.style.borderColor = '';
+            }
+        });
+    </script>
+</body>
+
+</html>

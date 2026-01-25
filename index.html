@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="OTO VIỆT - Nền tảng mua bán xe ô tô uy tín hàng đầu Việt Nam. Đa dạng các dòng xe từ Toyota, Honda, Mercedes, BMW, VinFast với giá tốt nhất.">
+    <title>OTO VIỆT - Mua Bán Xe Ô Tô Uy Tín Hàng Đầu</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container header-content">
+            <a href="/" class="logo">
+                <div class="logo-icon">🚗</div>
+                <span>OTO VIỆT</span>
+            </a>
+
+            <nav class="nav">
+                <a href="/" class="nav-link active">Trang chủ</a>
+                <a href="#products" class="nav-link">Xe ô tô</a>
+                <a href="#features" class="nav-link">Dịch vụ</a>
+                <a href="#contact" class="nav-link">Liên hệ</a>
+            </nav>
+
+            <div class="header-actions">
+                <a href="pages/cart.html" class="cart-btn">
+                    🛒
+                    <span class="cart-count" id="cartCount" style="display: none;">0</span>
+                </a>
+
+                <!-- Guest Menu -->
+                <div id="userMenuGuest" style="display: flex; gap: 0.5rem;">
+                    <a href="pages/login.html" class="btn btn-ghost btn-sm">Đăng nhập</a>
+                    <a href="pages/register.html" class="btn btn-primary btn-sm">Đăng ký</a>
+                </div>
+
+                <!-- Logged In Menu -->
+                <div class="user-menu" id="userMenuLoggedIn" style="display: none;">
+                    <button class="user-btn">
+                        <div class="user-avatar" id="userAvatarInitial">A</div>
+                        <span id="userNameDisplay">User</span>
+                        <span>▼</span>
+                    </button>
+                    <div class="user-dropdown">
+                        <a href="pages/profile.html" class="dropdown-item">
+                            👤 Tài khoản
+                        </a>
+                        <a href="pages/profile.html#orders" class="dropdown-item">
+                            📦 Đơn hàng
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" onclick="Auth.logout()">
+                            🚪 Đăng xuất
+                        </button>
+                    </div>
+                </div>
+
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav">
+        <a href="/" class="mobile-nav-link active">Trang chủ</a>
+        <a href="#products" class="mobile-nav-link">Xe ô tô</a>
+        <a href="#features" class="mobile-nav-link">Dịch vụ</a>
+        <a href="#contact" class="mobile-nav-link">Liên hệ</a>
+        <div style="border-top: 1px solid var(--border-color); margin-top: 1rem; padding-top: 1rem;">
+            <a href="pages/login.html" class="mobile-nav-link">Đăng nhập</a>
+            <a href="pages/register.html" class="mobile-nav-link">Đăng ký</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    <span>Đại lý ủy quyền chính hãng</span>
+                </div>
+                <h1 class="hero-title">
+                    Tìm Kiếm <span>Chiếc Xe</span> Mơ Ước Của Bạn
+                </h1>
+                <p class="hero-description">
+                    Khám phá bộ sưu tập xe ô tô đa dạng với giá cả cạnh tranh nhất.
+                    Từ sedan cao cấp đến SUV mạnh mẽ, chúng tôi có tất cả những gì bạn cần.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#products" class="btn btn-primary btn-lg">
+                        Khám phá ngay
+                        <span>→</span>
+                    </a>
+                    <a href="#features" class="btn btn-secondary btn-lg">
+                        Tìm hiểu thêm
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">500+</div>
+                        <div class="stat-label">Xe có sẵn</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">10K+</div>
+                        <div class="stat-label">Khách hàng</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">15+</div>
+                        <div class="stat-label">Thương hiệu</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800&h=500&fit=crop"
+                    alt="Luxury Car" class="hero-car-image">
+                <div class="hero-glow"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">✨ Dịch vụ của chúng tôi</span>
+                <h2 class="section-title">Tại Sao Chọn OTO VIỆT?</h2>
+                <p>Chúng tôi cam kết mang đến trải nghiệm mua xe tốt nhất cho bạn</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">✓</div>
+                    <h3 class="feature-title">Xe Chính Hãng 100%</h3>
+                    <p class="feature-description">
+                        Tất cả xe đều là xe chính hãng, có đầy đủ giấy tờ và bảo hành từ nhà sản xuất.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3 class="feature-title">Giá Cả Minh Bạch</h3>
+                    <p class="feature-description">
+                        Cam kết giá tốt nhất thị trường, không phát sinh chi phí ẩn.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3 class="feature-title">Bảo Hành Toàn Diện</h3>
+                    <p class="feature-description">
+                        Chế độ bảo hành lên đến 5 năm và hỗ trợ kỹ thuật 24/7.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚚</div>
+                    <h3 class="feature-title">Giao Xe Tận Nơi</h3>
+                    <p class="feature-description">
+                        Miễn phí giao xe tận nơi trên toàn quốc, nhanh chóng và an toàn.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💳</div>
+                    <h3 class="feature-title">Hỗ Trợ Trả Góp</h3>
+                    <p class="feature-description">
+                        Hỗ trợ vay ngân hàng lên đến 80% giá trị xe với lãi suất ưu đãi.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3 class="feature-title">Đổi Trả Linh Hoạt</h3>
+                    <p class="feature-description">
+                        Đổi trả trong vòng 7 ngày nếu không hài lòng với bất kỳ lý do gì.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="section" id="products">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">🚗 Bộ sưu tập xe</span>
+                <h2 class="section-title">Khám Phá Các Dòng Xe</h2>
+                <p>Lựa chọn đa dạng từ các thương hiệu hàng đầu thế giới</p>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Tìm kiếm xe...">
+                </div>
+                <select class="filter-select" id="brandFilter">
+                    <option value="">Tất cả hãng xe</option>
+                    <option value="Toyota">Toyota</option>
+                    <option value="Honda">Honda</option>
+                    <option value="Mercedes-Benz">Mercedes-Benz</option>
+                    <option value="BMW">BMW</option>
+                    <option value="Hyundai">Hyundai</option>
+                    <option value="Mazda">Mazda</option>
+                    <option value="VinFast">VinFast</option>
+                    <option value="Kia">Kia</option>
+                    <option value="Ford">Ford</option>
+                    <option value="Lexus">Lexus</option>
+                    <option value="Audi">Audi</option>
+                </select>
+                <select class="filter-select" id="typeFilter">
+                    <option value="">Loại xe</option>
+                    <option value="Sedan">Sedan</option>
+                    <option value="SUV">SUV</option>
+                    <option value="Hatchback">Hatchback</option>
+                    <option value="Pickup">Pickup</option>
+                </select>
+                <select class="filter-select" id="priceFilter">
+                    <option value="">Khoảng giá</option>
+                    <option value="0-1000000000">Dưới 1 tỷ</option>
+                    <option value="1000000000-2000000000">1 - 2 tỷ</option>
+                    <option value="2000000000-3000000000">2 - 3 tỷ</option>
+                    <option value="3000000000-">Trên 3 tỷ</option>
+                </select>
+                <select class="filter-select" id="sortFilter">
+                    <option value="">Sắp xếp</option>
+                    <option value="price-asc">Giá tăng dần</option>
+                    <option value="price-desc">Giá giảm dần</option>
+                    <option value="name-asc">Tên A-Z</option>
+                    <option value="newest">Mới nhất</option>
+                </select>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be rendered here by JavaScript -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact" style="background: var(--bg-secondary);">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">📞 Liên hệ</span>
+                <h2 class="section-title">Bạn Cần Hỗ Trợ?</h2>
+                <p>Đội ngũ tư vấn của chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7</p>
+            </div>
+
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 900px; margin: 0 auto;">
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon">📱</div>
+                    <h3 class="feature-title">Hotline</h3>
+                    <p class="feature-description">1900 6868</p>
+                </div>
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon">📧</div>
+                    <h3 class="feature-title">Email</h3>
+                    <p class="feature-description">info@otoviet.vn</p>
+                </div>
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon">📍</div>
+                    <h3 class="feature-title">Showroom</h3>
+                    <p class="feature-description">123 Nguyễn Văn Linh, Q.7, HCM</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="footer-logo">
+                        <div class="logo-icon">🚗</div>
+                        <span>OTO VIỆT</span>
+                    </a>
+                    <p class="footer-description">
+                        OTO VIỆT là nền tảng mua bán xe ô tô uy tín hàng đầu Việt Nam.
+                        Chúng tôi cam kết mang đến những chiếc xe chất lượng với giá cả hợp lý nhất.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="footer-heading">Liên kết</h4>
+                    <div class="footer-links">
+                        <a href="/" class="footer-link">Trang chủ</a>
+                        <a href="#products" class="footer-link">Xe ô tô</a>
+                        <a href="#features" class="footer-link">Dịch vụ</a>
+                        <a href="#contact" class="footer-link">Liên hệ</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="footer-heading">Hỗ trợ</h4>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Hướng dẫn mua xe</a>
+                        <a href="#" class="footer-link">Chính sách bảo hành</a>
+                        <a href="#" class="footer-link">Điều khoản sử dụng</a>
+                        <a href="#" class="footer-link">Chính sách bảo mật</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="footer-heading">Liên hệ</h4>
+                    <div class="footer-links">
+                        <span class="footer-link">📍 123 Nguyễn Văn Linh, Q.7, HCM</span>
+                        <span class="footer-link">📱 1900 6868</span>
+                        <span class="footer-link">📧 info@otoviet.vn</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <span>© 2024 OTO VIỆT. All rights reserved.</span>
+                <div class="footer-social">
+                    <a href="#" class="social-link">📘</a>
+                    <a href="#" class="social-link">📸</a>
+                    <a href="#" class="social-link">📺</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/orders.js"></script>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.toggle('active');
+        });
+
+        // Close mobile menu on link click
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNav.classList.remove('active');
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
