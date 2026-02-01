@@ -1,12 +1,10 @@
 // Firebase Configuration for OTO VIỆT
-const firebaseConfig = {
-    apiKey: "AIzaSyBrDwOIaq5E6fN-A0prhZI6rY81CDi-vJk",
-    authDomain: "oto-viet.firebaseapp.com",
-    projectId: "oto-viet",
-    storageBucket: "oto-viet.firebasestorage.app",
-    messagingSenderId: "985342728635",
-    appId: "1:985342728635:web:23375385d42e07b2f74c9e"
-};
+const firebaseConfig = window.FIREBASE_CONFIG || {};
+
+if (!window.FIREBASE_CONFIG) {
+    console.error('CRITICAL: Firebase Configuration missing. Please ensure js/config.js is present and loaded.');
+    alert('Lỗi cấu hình: Không tìm thấy file js/config.js. Vui lòng liên hệ quản trị viên.');
+}
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
