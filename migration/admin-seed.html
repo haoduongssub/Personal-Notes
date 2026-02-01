@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Migration Dữ Liệu</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .migration-container {
+            max-width: 800px;
+            margin: 100px auto;
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+        }
+
+        .log-window {
+            background: #000;
+            color: #0f0;
+            font-family: monospace;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            height: 400px;
+            overflow-y: auto;
+            margin-top: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-line {
+            margin: 5px 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 2px;
+        }
+
+        .status-success {
+            color: #0f0;
+        }
+
+        .status-error {
+            color: #f00;
+        }
+
+        .status-info {
+            color: #0ff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="migration-container">
+        <h1>Admin Migration Tool</h1>
+        <p>Công cụ này sẽ xóa dữ liệu cũ (nếu bạn đồng ý) và thêm 24 xe mẫu vào Firestore.</p>
+
+        <div class="alert alert-warning">
+            ⚠️ Lưu ý: Yêu cầu quyền ghi (Write Permission) trên Firestore. Đảm bảo bạn đã cập nhật Security Rules.
+        </div>
+
+        <button id="startBtn" class="btn btn-primary btn-lg w-full">
+            Bắt đầu Migration
+        </button>
+
+        <div class="log-window" id="logWindow">
+            <div class="status-line">Waiting to start...</div>
+        </div>
+
+        <div class="mt-lg text-center">
+            <a href="index.html" class="btn btn-ghost">Quay lại Trang chủ</a>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <!-- Config & Logic -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/products.js"></script>
+
+    <script>
+        const logWindow = document.getElementById('logWindow');
+        const startBtn = document.getElementById('startBtn');
+
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `status-line status-${type}`;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logWindow.appendChild(div);
+            logWindow.scrollTop = logWindow.scrollHeight;
+        }
+
+        // Override console.log to show in UI
+        const originalLog = console.log;
+        const originalError = console.error;
+
+        console.log = function (...args) {
+            originalLog.apply(console, args);
+            log(args.join(' '), 'info');
+        };
+
+        console.error = function (...args) {
+            originalError.apply(console, args);
+            log(args.join(' '), 'error');
+        };
+
+        startBtn.addEventListener('click', async () => {
+            startBtn.disabled = true;
+            startBtn.textContent = 'Đang xử lý...';
+            log('Starting migration process...', 'info');
+
+            try {
+                // Check authentication state if needed, but for now we rely on rules
+                if (firebase.auth().currentUser) {
+                    log('User is logged in: ' + firebase.auth().currentUser.email, 'success');
+                } else {
+                    log('User is NOT logged in. Write operations might fail if logic requires auth.', 'warning');
+                }
+
+                await ProductsService.seedSampleData();
+                log('Migration completed successfully!', 'success');
+                alert('Migration hoàn tất!');
+            } catch (error) {
+                log('Migration FAILED: ' + error.message, 'error');
+                alert('Có lỗi xảy ra: ' + error.message);
+            } finally {
+                startBtn.disabled = false;
+                startBtn.textContent = 'Bắt đầu Migration';
+            }
+        });
+    </script>
+</body>
+
+</html>

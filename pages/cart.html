@@ -22,14 +22,14 @@
                 <a href="/#products" class="nav-link">Xe ô tô</a>
             </nav>
             <div class="header-actions">
-                <a href="cart.html" class="cart-btn">🛒<span class="cart-count" id="cartCount"
-                        style="display: none;">0</span></a>
-                <div id="userMenuGuest" style="display: flex; gap: 0.5rem;">
+                <a href="cart.html" class="cart-btn" aria-label="Giỏ hàng">🛒<span class="cart-count d-none"
+                        id="cartCount">0</span></a>
+                <div id="userMenuGuest" class="d-flex gap-sm">
                     <a href="login.html" class="btn btn-ghost btn-sm">Đăng nhập</a>
                     <a href="register.html" class="btn btn-primary btn-sm">Đăng ký</a>
                 </div>
-                <div class="user-menu" id="userMenuLoggedIn" style="display: none;">
-                    <button class="user-btn">
+                <div class="user-menu d-none" id="userMenuLoggedIn">
+                    <button class="user-btn" aria-label="Menu tài khoản">
                         <div class="user-avatar" id="userAvatarInitial">A</div><span id="userNameDisplay">User</span>
                     </button>
                 </div>
@@ -39,9 +39,9 @@
 
     <section class="cart-page">
         <div class="container">
-            <h1 style="margin-bottom: var(--spacing-xl);">Giỏ hàng của bạn</h1>
+            <h1 class="mb-xl">Giỏ hàng của bạn</h1>
 
-            <div id="emptyCart" class="empty-state" style="display: none;">
+            <div id="emptyCart" class="empty-state d-none">
                 <div class="empty-icon">🛒</div>
                 <h3 class="empty-title">Giỏ hàng trống</h3>
                 <p class="empty-description">Hãy thêm xe vào giỏ hàng để tiếp tục</p>
@@ -51,7 +51,7 @@
             <div class="cart-layout">
                 <div class="cart-items" id="cartItems"></div>
 
-                <div class="cart-summary" id="cartSummary" style="display: none;">
+                <div class="cart-summary d-none" id="cartSummary">
                     <div class="summary-card">
                         <h3 class="summary-title">Tổng đơn hàng</h3>
                         <div class="summary-row">
@@ -70,11 +70,10 @@
                             <span>Tổng cộng</span>
                             <span class="summary-value" id="total">0đ</span>
                         </div>
-                        <a href="checkout.html" class="btn btn-primary w-full btn-lg"
-                            style="margin-top: var(--spacing-lg);">
+                        <a href="checkout.html" class="btn btn-primary w-full btn-lg mt-lg">
                             Tiến hành đặt hàng
                         </a>
-                        <a href="/" class="btn btn-ghost w-full" style="margin-top: var(--spacing-sm);">
+                        <a href="/" class="btn btn-ghost w-full mt-sm">
                             Tiếp tục mua sắm
                         </a>
                     </div>

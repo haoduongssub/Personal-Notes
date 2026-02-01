@@ -30,31 +30,32 @@
                 </div>
 
                 <!-- Alert Message -->
-                <div id="alertMessage" class="alert" style="display: none;"></div>
+                <div id="alertMessage" class="alert d-none"></div>
 
                 <form id="registerForm">
                     <div class="form-group">
                         <label for="displayName" class="form-label">Họ và tên</label>
                         <input type="text" id="displayName" class="form-input" placeholder="Nhập họ và tên của bạn"
-                            required minlength="2">
+                            required minlength="2" autocomplete="name">
                     </div>
 
                     <div class="form-group">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" id="email" class="form-input" placeholder="Nhập email của bạn" required>
+                        <input type="email" id="email" class="form-input" placeholder="Nhập email của bạn" required
+                            autocomplete="email">
                     </div>
 
                     <div class="form-group">
                         <label for="password" class="form-label">Mật khẩu</label>
                         <input type="password" id="password" class="form-input" placeholder="Tối thiểu 6 ký tự" required
-                            minlength="6">
+                            minlength="6" autocomplete="new-password">
                         <span class="form-hint">Mật khẩu phải có ít nhất 6 ký tự</span>
                     </div>
 
                     <div class="form-group">
                         <label for="confirmPassword" class="form-label">Xác nhận mật khẩu</label>
                         <input type="password" id="confirmPassword" class="form-input" placeholder="Nhập lại mật khẩu"
-                            required minlength="6">
+                            required minlength="6" autocomplete="new-password">
                     </div>
 
                     <div class="form-group">
@@ -75,8 +76,8 @@
                 </div>
             </div>
 
-            <div style="text-align: center; margin-top: 1.5rem;">
-                <a href="/" style="color: var(--text-muted); font-size: 0.875rem;">← Quay lại trang chủ</a>
+            <div class="auth-back-link">
+                <a href="/">← Quay lại trang chủ</a>
             </div>
         </div>
     </div>

@@ -34,20 +34,20 @@
             </nav>
 
             <div class="header-actions">
-                <a href="pages/cart.html" class="cart-btn">
+                <a href="pages/cart.html" class="cart-btn" aria-label="Giỏ hàng">
                     🛒
-                    <span class="cart-count" id="cartCount" style="display: none;">0</span>
+                    <span class="cart-count d-none" id="cartCount">0</span>
                 </a>
 
                 <!-- Guest Menu -->
-                <div id="userMenuGuest" style="display: flex; gap: 0.5rem;">
+                <div id="userMenuGuest" class="d-flex gap-sm">
                     <a href="pages/login.html" class="btn btn-ghost btn-sm">Đăng nhập</a>
                     <a href="pages/register.html" class="btn btn-primary btn-sm">Đăng ký</a>
                 </div>
 
                 <!-- Logged In Menu -->
-                <div class="user-menu" id="userMenuLoggedIn" style="display: none;">
-                    <button class="user-btn">
+                <div class="user-menu d-none" id="userMenuLoggedIn">
+                    <button class="user-btn" aria-label="Menu tài khoản" aria-expanded="false">
                         <div class="user-avatar" id="userAvatarInitial">A</div>
                         <span id="userNameDisplay">User</span>
                         <span>▼</span>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
 
-                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu chính">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -81,7 +81,7 @@
         <a href="#products" class="mobile-nav-link">Xe ô tô</a>
         <a href="#features" class="mobile-nav-link">Dịch vụ</a>
         <a href="#contact" class="mobile-nav-link">Liên hệ</a>
-        <div style="border-top: 1px solid var(--border-color); margin-top: 1rem; padding-top: 1rem;">
+        <div class="mobile-nav-divider">
             <a href="pages/login.html" class="mobile-nav-link">Đăng nhập</a>
             <a href="pages/register.html" class="mobile-nav-link">Đăng ký</a>
         </div>
@@ -202,10 +202,11 @@
             <!-- Filter Bar -->
             <div class="filter-bar">
                 <div class="search-box">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" class="search-input" id="searchInput" placeholder="Tìm kiếm xe...">
+                    <span class="search-icon" aria-hidden="true">🔍</span>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Tìm kiếm xe..."
+                        autocomplete="on" aria-label="Tìm kiếm xe">
                 </div>
-                <select class="filter-select" id="brandFilter">
+                <select class="filter-select" id="brandFilter" aria-label="Lọc theo hãng xe">
                     <option value="">Tất cả hãng xe</option>
                     <option value="Toyota">Toyota</option>
                     <option value="Honda">Honda</option>
@@ -219,21 +220,21 @@
                     <option value="Lexus">Lexus</option>
                     <option value="Audi">Audi</option>
                 </select>
-                <select class="filter-select" id="typeFilter">
+                <select class="filter-select" id="typeFilter" aria-label="Lọc theo loại xe">
                     <option value="">Loại xe</option>
                     <option value="Sedan">Sedan</option>
                     <option value="SUV">SUV</option>
                     <option value="Hatchback">Hatchback</option>
                     <option value="Pickup">Pickup</option>
                 </select>
-                <select class="filter-select" id="priceFilter">
+                <select class="filter-select" id="priceFilter" aria-label="Lọc theo khoảng giá">
                     <option value="">Khoảng giá</option>
                     <option value="0-1000000000">Dưới 1 tỷ</option>
                     <option value="1000000000-2000000000">1 - 2 tỷ</option>
                     <option value="2000000000-3000000000">2 - 3 tỷ</option>
                     <option value="3000000000-">Trên 3 tỷ</option>
                 </select>
-                <select class="filter-select" id="sortFilter">
+                <select class="filter-select" id="sortFilter" aria-label="Sắp xếp sản phẩm">
                     <option value="">Sắp xếp</option>
                     <option value="price-asc">Giá tăng dần</option>
                     <option value="price-desc">Giá giảm dần</option>
@@ -253,7 +254,7 @@
     </section>
 
     <!-- Contact Section -->
-    <section class="section" id="contact" style="background: var(--bg-secondary);">
+    <section class="section section-bg-secondary" id="contact">
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">📞 Liên hệ</span>
@@ -261,19 +262,18 @@
                 <p>Đội ngũ tư vấn của chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7</p>
             </div>
 
-            <div
-                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 900px; margin: 0 auto;">
-                <div class="feature-card" style="text-align: center;">
+            <div class="contact-grid">
+                <div class="feature-card text-center">
                     <div class="feature-icon">📱</div>
                     <h3 class="feature-title">Hotline</h3>
                     <p class="feature-description">1900 6868</p>
                 </div>
-                <div class="feature-card" style="text-align: center;">
+                <div class="feature-card text-center">
                     <div class="feature-icon">📧</div>
                     <h3 class="feature-title">Email</h3>
                     <p class="feature-description">info@otoviet.vn</p>
                 </div>
-                <div class="feature-card" style="text-align: center;">
+                <div class="feature-card text-center">
                     <div class="feature-icon">📍</div>
                     <h3 class="feature-title">Showroom</h3>
                     <p class="feature-description">123 Nguyễn Văn Linh, Q.7, HCM</p>
@@ -330,9 +330,9 @@
             <div class="footer-bottom">
                 <span>© 2024 OTO VIỆT. All rights reserved.</span>
                 <div class="footer-social">
-                    <a href="#" class="social-link">📘</a>
-                    <a href="#" class="social-link">📸</a>
-                    <a href="#" class="social-link">📺</a>
+                    <a href="#" class="social-link" aria-label="Facebook">📘</a>
+                    <a href="#" class="social-link" aria-label="Instagram">📸</a>
+                    <a href="#" class="social-link" aria-label="Youtube">📺</a>
                 </div>
             </div>
         </div>
@@ -346,6 +346,7 @@
     <!-- App Scripts -->
     <script src="js/firebase-config.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/products.js"></script>
     <script src="js/app.js"></script>
     <script src="js/cart.js"></script>
     <script src="js/orders.js"></script>
