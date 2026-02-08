@@ -1,25 +1,49 @@
 <!DOCTYPE html>
 <html lang="vi">
+<!--
+================================================================================
+OTO VIỆT - TRANG ĐĂNG NHẬP (login.html)
+================================================================================
+
+Trang này cho phép người dùng đăng nhập vào hệ thống.
+
+CHỨC NĂNG:
+- Form đăng nhập với email và mật khẩu
+- Kiểm tra validation trước khi submit
+- Gọi Auth.login() để xác thực với Firebase
+- Hiển thị thông báo lỗi/thành công
+- Chức năng "Quên mật khẩu" (modal popup)
+- Tự động redirect nếu đã đăng nhập
+
+================================================================================
+-->
 
 <head>
+    <!-- ===== META TAGS ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Đăng nhập vào OTO VIỆT để quản lý tài khoản và theo dõi đơn hàng của bạn.">
     <title>Đăng Nhập - OTO VIỆT</title>
 
-    <!-- Google Fonts -->
+    <!-- ===== GOOGLE FONTS ===== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Styles -->
+    <!-- ===== CSS ===== -->
     <link rel="stylesheet" href="../styles.css">
 </head>
 
 <body>
+    <!-- ================================================================
+         PHẦN 1: TRANG ĐĂNG NHẬP
+         ================================================================ -->
     <div class="auth-page">
         <div class="auth-container">
+            <!-- Card chứa form đăng nhập -->
             <div class="auth-card">
+
+                <!-- ===== HEADER: Logo + Tiêu đề ===== -->
                 <div class="auth-header">
                     <a href="/" class="auth-logo">
                         <div class="logo-icon">🚗</div>
@@ -29,22 +53,26 @@
                     <p class="auth-subtitle">Đăng nhập để tiếp tục mua sắm</p>
                 </div>
 
-                <!-- Alert Message -->
+                <!-- ===== ALERT MESSAGE: Hiển thị thông báo lỗi/thành công ===== -->
                 <div id="alertMessage" class="alert d-none"></div>
 
+                <!-- ===== FORM ĐĂNG NHẬP ===== -->
                 <form id="loginForm">
+                    <!-- Trường Email -->
                     <div class="form-group">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" id="email" class="form-input" placeholder="Nhập email của bạn" required
                             autocomplete="email">
                     </div>
 
+                    <!-- Trường Mật khẩu -->
                     <div class="form-group">
                         <label for="password" class="form-label">Mật khẩu</label>
                         <input type="password" id="password" class="form-input" placeholder="Nhập mật khẩu" required
                             minlength="6" autocomplete="current-password">
                     </div>
 
+                    <!-- Checkbox "Ghi nhớ" + Link "Quên mật khẩu" -->
                     <div class="form-group flex-between">
                         <label class="form-checkbox">
                             <input type="checkbox" id="rememberMe">
@@ -53,29 +81,40 @@
                         <a href="#" onclick="showForgotPassword()" class="text-sm">Quên mật khẩu?</a>
                     </div>
 
+                    <!-- Nút Submit -->
                     <button type="submit" class="btn btn-primary w-full btn-lg" id="submitBtn">
                         Đăng nhập
                     </button>
                 </form>
 
+                <!-- ===== FOOTER: Link đến trang đăng ký ===== -->
                 <div class="auth-footer">
                     <p>Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a></p>
                 </div>
             </div>
 
+            <!-- Link quay lại trang chủ -->
             <div class="auth-back-link">
                 <a href="/">← Quay lại trang chủ</a>
             </div>
         </div>
     </div>
 
-    <!-- Forgot Password Modal -->
+    <!-- ================================================================
+         PHẦN 2: MODAL QUÊN MẬT KHẨU
+         ================================================================
+         Popup hiển thị khi click "Quên mật khẩu?"
+         Cho phép nhập email để nhận link reset password
+         ================================================================ -->
     <div class="modal-overlay" id="forgotPasswordModal">
         <div class="modal">
+            <!-- Header Modal -->
             <div class="modal-header">
                 <h3 class="modal-title">Quên mật khẩu</h3>
                 <button class="modal-close" onclick="hideForgotPassword()">✕</button>
             </div>
+
+            <!-- Body Modal -->
             <div class="modal-body">
                 <p class="modal-description">
                     Nhập email của bạn và chúng tôi sẽ gửi link đặt lại mật khẩu.
@@ -86,6 +125,8 @@
                 </div>
                 <div id="resetAlertMessage" class="alert d-none"></div>
             </div>
+
+            <!-- Footer Modal -->
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="hideForgotPassword()">Hủy</button>
                 <button class="btn btn-primary" onclick="handleResetPassword()">Gửi link</button>
@@ -93,78 +134,105 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
+    <!-- ================================================================
+         PHẦN 3: SCRIPTS
+         ================================================================ -->
+
+    <!-- Firebase SDKs (từ CDN) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <!-- App Scripts -->
-    <script src="../js/config.js"></script>
-    <script src="../js/firebase-config.js"></script>
-    <script src="../js/auth.js"></script>
+    <script src="../js/config.js"></script> <!-- Cấu hình Firebase -->
+    <script src="../js/firebase-config.js"></script> <!-- Khởi tạo Firebase -->
+    <script src="../js/auth.js"></script> <!-- Module xác thực -->
 
     <script>
-        // Check if already logged in
+        /* ================================================================
+           SCRIPT: XỬ LÝ ĐĂNG NHẬP
+           ================================================================ */
+
+        /* ----------------------------------------
+           KIỂM TRA TRẠNG THÁI ĐĂNG NHẬP
+           ----------------------------------------
+           Nếu đã đăng nhập rồi → redirect về trang chủ
+           ---------------------------------------- */
         auth.onAuthStateChanged((user) => {
             if (user) {
                 window.location.href = '/';
             }
         });
 
-        // Handle login form submission
+        /* ----------------------------------------
+           XỬ LÝ SUBMIT FORM ĐĂNG NHẬP
+           ---------------------------------------- */
         const loginForm = document.getElementById('loginForm');
         const alertMessage = document.getElementById('alertMessage');
         const submitBtn = document.getElementById('submitBtn');
 
         loginForm.addEventListener('submit', async (e) => {
+            // Ngăn form submit mặc định
             e.preventDefault();
 
+            // Lấy giá trị từ form
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
 
-            // Disable button and show loading
+            // Disable nút và hiển thị loading
             submitBtn.disabled = true;
             submitBtn.textContent = 'Đang đăng nhập...';
 
-            // Hide previous alerts
+            // Ẩn thông báo cũ
             alertMessage.style.display = 'none';
 
-            // Attempt login
+            // Gọi Auth.login() để đăng nhập
             const result = await Auth.login(email, password);
 
             if (result.success) {
+                // ===== ĐĂNG NHẬP THÀNH CÔNG =====
                 alertMessage.className = 'alert alert-success';
                 alertMessage.innerHTML = '✓ Đăng nhập thành công! Đang chuyển hướng...';
                 alertMessage.style.display = 'flex';
 
+                // Redirect sau 1 giây
                 setTimeout(() => {
                     window.location.href = '/';
                 }, 1000);
             } else {
+                // ===== ĐĂNG NHẬP THẤT BẠI =====
                 alertMessage.className = 'alert alert-error';
                 alertMessage.innerHTML = '✕ ' + result.error;
                 alertMessage.style.display = 'flex';
 
+                // Enable lại nút
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Đăng nhập';
             }
         });
 
-        // Forgot password functions
+        /* ----------------------------------------
+           CHỨC NĂNG QUÊN MẬT KHẨU
+           ---------------------------------------- */
+
+        // Hiển thị modal quên mật khẩu
         function showForgotPassword() {
             document.getElementById('forgotPasswordModal').classList.add('active');
         }
 
+        // Ẩn modal quên mật khẩu
         function hideForgotPassword() {
             document.getElementById('forgotPasswordModal').classList.remove('active');
             document.getElementById('resetEmail').value = '';
             document.getElementById('resetAlertMessage').style.display = 'none';
         }
 
+        // Xử lý gửi email reset password
         async function handleResetPassword() {
             const email = document.getElementById('resetEmail').value.trim();
             const resetAlert = document.getElementById('resetAlertMessage');
 
+            // Kiểm tra email
             if (!email) {
                 resetAlert.className = 'alert alert-error';
                 resetAlert.innerHTML = '✕ Vui lòng nhập email';
@@ -172,24 +240,30 @@
                 return;
             }
 
+            // Gọi Auth.resetPassword() để gửi email
             const result = await Auth.resetPassword(email);
 
             if (result.success) {
+                // ===== GỬI EMAIL THÀNH CÔNG =====
                 resetAlert.className = 'alert alert-success';
                 resetAlert.innerHTML = '✓ Link đặt lại mật khẩu đã được gửi!';
                 resetAlert.style.display = 'flex';
 
+                // Đóng modal sau 2 giây
                 setTimeout(() => {
                     hideForgotPassword();
                 }, 2000);
             } else {
+                // ===== GỬI EMAIL THẤT BẠI =====
                 resetAlert.className = 'alert alert-error';
                 resetAlert.innerHTML = '✕ ' + result.error;
                 resetAlert.style.display = 'flex';
             }
         }
 
-        // Close modal on overlay click
+        /* ----------------------------------------
+           ĐÓNG MODAL KHI CLICK OVERLAY
+           ---------------------------------------- */
         document.getElementById('forgotPasswordModal').addEventListener('click', (e) => {
             if (e.target.classList.contains('modal-overlay')) {
                 hideForgotPassword();

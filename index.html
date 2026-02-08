@@ -1,31 +1,72 @@
 <!DOCTYPE html>
 <html lang="vi">
+<!--
+================================================================================
+OTO VIỆT - TRANG CHỦ (index.html)
+================================================================================
+
+Trang chủ của ứng dụng mua bán xe ô tô OTO VIỆT.
+
+CẤU TRÚC TRANG:
+1. Header - Thanh điều hướng với logo, menu, giỏ hàng, user menu
+2. Mobile Nav - Menu hamburger cho mobile
+3. Hero Section - Banner chính với slogan và CTA
+4. Features Section - Giới thiệu dịch vụ/ưu điểm
+5. Products Section - Danh sách xe với bộ lọc
+6. Contact Section - Thông tin liên hệ
+7. Footer - Chân trang với links
+
+SCRIPTS:
+- Mobile menu toggle (hamburger)
+- Header scroll effect (thêm shadow khi scroll)
+- Smooth scroll cho anchor links
+- Các module JS được load theo thứ tự phụ thuộc
+
+================================================================================
+-->
 
 <head>
+    <!-- ================================================================
+         META TAGS
+         ================================================================ -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO: Description hiển thị trên Google Search Results -->
     <meta name="description"
         content="OTO VIỆT - Nền tảng mua bán xe ô tô uy tín hàng đầu Việt Nam. Đa dạng các dòng xe từ Toyota, Honda, Mercedes, BMW, VinFast với giá tốt nhất.">
     <title>OTO VIỆT - Mua Bán Xe Ô Tô Uy Tín Hàng Đầu</title>
 
-    <!-- Google Fonts -->
+    <!-- ================================================================
+         GOOGLE FONTS - Font Inter
+         ================================================================ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Styles -->
+    <!-- ================================================================
+         CSS
+         ================================================================ -->
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <!-- Header -->
+    <!-- ================================================================
+         PHẦN 1: HEADER - THANH ĐIỀU HƯỚNG CHÍNH
+         ================================================================
+         Chứa: Logo, Navigation menu, Cart button, User menu
+         Class 'scrolled' được thêm khi scroll xuống
+         ================================================================ -->
     <header class="header" id="header">
         <div class="container header-content">
+
+            <!-- ===== LOGO ===== -->
             <a href="/" class="logo">
                 <div class="logo-icon">🚗</div>
                 <span>OTO VIỆT</span>
             </a>
 
+            <!-- ===== NAVIGATION LINKS (Desktop) ===== -->
             <nav class="nav">
                 <a href="/" class="nav-link active">Trang chủ</a>
                 <a href="#products" class="nav-link">Xe ô tô</a>
@@ -33,25 +74,32 @@
                 <a href="#contact" class="nav-link">Liên hệ</a>
             </nav>
 
+            <!-- ===== HEADER ACTIONS: Cart + User ===== -->
             <div class="header-actions">
+
+                <!-- Nút giỏ hàng với badge số lượng -->
                 <a href="pages/cart.html" class="cart-btn" aria-label="Giỏ hàng">
                     🛒
                     <span class="cart-count d-none" id="cartCount">0</span>
                 </a>
 
-                <!-- Guest Menu -->
+                <!-- ===== GUEST MENU (Chưa đăng nhập) ===== -->
+                <!-- Hiển thị khi user chưa đăng nhập -->
                 <div id="userMenuGuest" class="d-flex gap-sm">
                     <a href="pages/login.html" class="btn btn-ghost btn-sm">Đăng nhập</a>
                     <a href="pages/register.html" class="btn btn-primary btn-sm">Đăng ký</a>
                 </div>
 
-                <!-- Logged In Menu -->
+                <!-- ===== LOGGED IN MENU (Đã đăng nhập) ===== -->
+                <!-- Hiển thị khi user đã đăng nhập, với dropdown menu -->
                 <div class="user-menu d-none" id="userMenuLoggedIn">
                     <button class="user-btn" aria-label="Menu tài khoản" aria-expanded="false">
                         <div class="user-avatar" id="userAvatarInitial">A</div>
                         <span id="userNameDisplay">User</span>
                         <span>▼</span>
                     </button>
+
+                    <!-- Dropdown menu -->
                     <div class="user-dropdown">
                         <a href="pages/profile.html" class="dropdown-item">
                             👤 Tài khoản
@@ -66,6 +114,7 @@
                     </div>
                 </div>
 
+                <!-- ===== NÚT HAMBURGER MENU (Mobile) ===== -->
                 <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu chính">
                     <span></span>
                     <span></span>
@@ -75,7 +124,11 @@
         </div>
     </header>
 
-    <!-- Mobile Navigation -->
+    <!-- ================================================================
+         PHẦN 2: MOBILE NAVIGATION
+         ================================================================
+         Menu dọc hiển thị trên mobile khi click hamburger button
+         ================================================================ -->
     <nav class="mobile-nav" id="mobileNav">
         <a href="/" class="mobile-nav-link active">Trang chủ</a>
         <a href="#products" class="mobile-nav-link">Xe ô tô</a>
@@ -87,21 +140,40 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- ================================================================
+         PHẦN 3: HERO SECTION - BANNER CHÍNH
+         ================================================================
+         Phần banner lớn đầu trang với:
+         - Badge "Đại lý ủy quyền chính hãng"
+         - Tiêu đề + Mô tả
+         - Nút CTA (Call to Action)
+         - Thống kê (500+ xe, 10K+ khách hàng...)
+         - Hình ảnh xe
+         ================================================================ -->
     <section class="hero">
         <div class="container hero-content">
+
+            <!-- ===== HERO TEXT (Bên trái) ===== -->
             <div class="hero-text">
+
+                <!-- Badge -->
                 <div class="hero-badge">
                     <span class="hero-badge-dot"></span>
                     <span>Đại lý ủy quyền chính hãng</span>
                 </div>
+
+                <!-- Tiêu đề chính -->
                 <h1 class="hero-title">
                     Tìm Kiếm <span>Chiếc Xe</span> Mơ Ước Của Bạn
                 </h1>
+
+                <!-- Mô tả -->
                 <p class="hero-description">
                     Khám phá bộ sưu tập xe ô tô đa dạng với giá cả cạnh tranh nhất.
                     Từ sedan cao cấp đến SUV mạnh mẽ, chúng tôi có tất cả những gì bạn cần.
                 </p>
+
+                <!-- Nút CTA -->
                 <div class="hero-buttons">
                     <a href="#products" class="btn btn-primary btn-lg">
                         Khám phá ngay
@@ -111,6 +183,8 @@
                         Tìm hiểu thêm
                     </a>
                 </div>
+
+                <!-- Thống kê -->
                 <div class="hero-stats">
                     <div class="stat-item">
                         <div class="stat-value">500+</div>
@@ -126,6 +200,8 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ===== HERO IMAGE (Bên phải) ===== -->
             <div class="hero-image">
                 <img src="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800&h=500&fit=crop"
                     alt="Luxury Car" class="hero-car-image">
@@ -134,16 +210,31 @@
         </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- ================================================================
+         PHẦN 4: FEATURES SECTION - DỊCH VỤ
+         ================================================================
+         Giới thiệu các ưu điểm/dịch vụ của OTO VIỆT:
+         - Xe chính hãng 100%
+         - Giá cả minh bạch
+         - Bảo hành toàn diện
+         - Giao xe tận nơi
+         - Hỗ trợ trả góp
+         - Đổi trả linh hoạt
+         ================================================================ -->
     <section class="section" id="features">
         <div class="container">
+
+            <!-- Header của section -->
             <div class="section-header">
                 <span class="section-subtitle">✨ Dịch vụ của chúng tôi</span>
                 <h2 class="section-title">Tại Sao Chọn OTO VIỆT?</h2>
                 <p>Chúng tôi cam kết mang đến trải nghiệm mua xe tốt nhất cho bạn</p>
             </div>
 
+            <!-- Grid chứa 6 feature cards -->
             <div class="features-grid">
+
+                <!-- Feature 1: Xe chính hãng -->
                 <div class="feature-card">
                     <div class="feature-icon">✓</div>
                     <h3 class="feature-title">Xe Chính Hãng 100%</h3>
@@ -151,6 +242,8 @@
                         Tất cả xe đều là xe chính hãng, có đầy đủ giấy tờ và bảo hành từ nhà sản xuất.
                     </p>
                 </div>
+
+                <!-- Feature 2: Giá cả minh bạch -->
                 <div class="feature-card">
                     <div class="feature-icon">💰</div>
                     <h3 class="feature-title">Giá Cả Minh Bạch</h3>
@@ -158,6 +251,8 @@
                         Cam kết giá tốt nhất thị trường, không phát sinh chi phí ẩn.
                     </p>
                 </div>
+
+                <!-- Feature 3: Bảo hành -->
                 <div class="feature-card">
                     <div class="feature-icon">🔧</div>
                     <h3 class="feature-title">Bảo Hành Toàn Diện</h3>
@@ -165,6 +260,8 @@
                         Chế độ bảo hành lên đến 5 năm và hỗ trợ kỹ thuật 24/7.
                     </p>
                 </div>
+
+                <!-- Feature 4: Giao xe -->
                 <div class="feature-card">
                     <div class="feature-icon">🚚</div>
                     <h3 class="feature-title">Giao Xe Tận Nơi</h3>
@@ -172,6 +269,8 @@
                         Miễn phí giao xe tận nơi trên toàn quốc, nhanh chóng và an toàn.
                     </p>
                 </div>
+
+                <!-- Feature 5: Trả góp -->
                 <div class="feature-card">
                     <div class="feature-icon">💳</div>
                     <h3 class="feature-title">Hỗ Trợ Trả Góp</h3>
@@ -179,6 +278,8 @@
                         Hỗ trợ vay ngân hàng lên đến 80% giá trị xe với lãi suất ưu đãi.
                     </p>
                 </div>
+
+                <!-- Feature 6: Đổi trả -->
                 <div class="feature-card">
                     <div class="feature-icon">🔄</div>
                     <h3 class="feature-title">Đổi Trả Linh Hoạt</h3>
@@ -190,22 +291,34 @@
         </div>
     </section>
 
-    <!-- Products Section -->
+    <!-- ================================================================
+         PHẦN 5: PRODUCTS SECTION - DANH SÁCH XE
+         ================================================================
+         Hiển thị danh sách xe ô tô với:
+         - Bộ lọc: Tìm kiếm, Hãng xe, Loại xe, Khoảng giá, Sắp xếp
+         - Grid sản phẩm (render bởi App.renderProducts() trong app.js)
+         ================================================================ -->
     <section class="section" id="products">
         <div class="container">
+
+            <!-- Header của section -->
             <div class="section-header">
                 <span class="section-subtitle">🚗 Bộ sưu tập xe</span>
                 <h2 class="section-title">Khám Phá Các Dòng Xe</h2>
                 <p>Lựa chọn đa dạng từ các thương hiệu hàng đầu thế giới</p>
             </div>
 
-            <!-- Filter Bar -->
+            <!-- ===== FILTER BAR - THANH LỌC ===== -->
             <div class="filter-bar">
+
+                <!-- Ô tìm kiếm -->
                 <div class="search-box">
                     <span class="search-icon" aria-hidden="true">🔍</span>
                     <input type="text" class="search-input" id="searchInput" placeholder="Tìm kiếm xe..."
                         autocomplete="on" aria-label="Tìm kiếm xe">
                 </div>
+
+                <!-- Dropdown lọc hãng xe -->
                 <select class="filter-select" id="brandFilter" aria-label="Lọc theo hãng xe">
                     <option value="">Tất cả hãng xe</option>
                     <option value="Toyota">Toyota</option>
@@ -220,6 +333,8 @@
                     <option value="Lexus">Lexus</option>
                     <option value="Audi">Audi</option>
                 </select>
+
+                <!-- Dropdown lọc loại xe -->
                 <select class="filter-select" id="typeFilter" aria-label="Lọc theo loại xe">
                     <option value="">Loại xe</option>
                     <option value="Sedan">Sedan</option>
@@ -227,6 +342,8 @@
                     <option value="Hatchback">Hatchback</option>
                     <option value="Pickup">Pickup</option>
                 </select>
+
+                <!-- Dropdown lọc khoảng giá -->
                 <select class="filter-select" id="priceFilter" aria-label="Lọc theo khoảng giá">
                     <option value="">Khoảng giá</option>
                     <option value="0-1000000000">Dưới 1 tỷ</option>
@@ -234,6 +351,8 @@
                     <option value="2000000000-3000000000">2 - 3 tỷ</option>
                     <option value="3000000000-">Trên 3 tỷ</option>
                 </select>
+
+                <!-- Dropdown sắp xếp -->
                 <select class="filter-select" id="sortFilter" aria-label="Sắp xếp sản phẩm">
                     <option value="">Sắp xếp</option>
                     <option value="price-asc">Giá tăng dần</option>
@@ -243,9 +362,10 @@
                 </select>
             </div>
 
-            <!-- Products Grid -->
+            <!-- ===== PRODUCTS GRID ===== -->
+            <!-- Nội dung được render bởi JavaScript (App.renderProducts()) -->
             <div class="products-grid" id="productsGrid">
-                <!-- Products will be rendered here by JavaScript -->
+                <!-- Loading spinner hiển thị trong khi chờ render -->
                 <div class="loading">
                     <div class="loading-spinner"></div>
                 </div>
@@ -253,15 +373,22 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
+    <!-- ================================================================
+         PHẦN 6: CONTACT SECTION - LIÊN HỆ
+         ================================================================
+         Hiển thị thông tin liên hệ: Hotline, Email, Địa chỉ
+         ================================================================ -->
     <section class="section section-bg-secondary" id="contact">
         <div class="container">
+
+            <!-- Header -->
             <div class="section-header">
                 <span class="section-subtitle">📞 Liên hệ</span>
                 <h2 class="section-title">Bạn Cần Hỗ Trợ?</h2>
                 <p>Đội ngũ tư vấn của chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7</p>
             </div>
 
+            <!-- Grid 3 cột: Hotline, Email, Showroom -->
             <div class="contact-grid">
                 <div class="feature-card text-center">
                     <div class="feature-icon">📱</div>
@@ -282,10 +409,18 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ================================================================
+         PHẦN 7: FOOTER - CHÂN TRANG
+         ================================================================
+         Chứa: Logo, Mô tả, Links, Thông tin liên hệ, Social media
+         ================================================================ -->
     <footer class="footer">
         <div class="container">
+
+            <!-- Grid chính của footer -->
             <div class="footer-grid">
+
+                <!-- Cột 1: Logo + Mô tả -->
                 <div class="footer-brand">
                     <a href="/" class="footer-logo">
                         <div class="logo-icon">🚗</div>
@@ -297,6 +432,7 @@
                     </p>
                 </div>
 
+                <!-- Cột 2: Liên kết nhanh -->
                 <div>
                     <h4 class="footer-heading">Liên kết</h4>
                     <div class="footer-links">
@@ -307,6 +443,7 @@
                     </div>
                 </div>
 
+                <!-- Cột 3: Hỗ trợ -->
                 <div>
                     <h4 class="footer-heading">Hỗ trợ</h4>
                     <div class="footer-links">
@@ -317,6 +454,7 @@
                     </div>
                 </div>
 
+                <!-- Cột 4: Liên hệ -->
                 <div>
                     <h4 class="footer-heading">Liên hệ</h4>
                     <div class="footer-links">
@@ -327,6 +465,7 @@
                 </div>
             </div>
 
+            <!-- Footer bottom: Copyright + Social -->
             <div class="footer-bottom">
                 <span>© 2024 OTO VIỆT. All rights reserved.</span>
                 <div class="footer-social">
@@ -338,22 +477,36 @@
         </div>
     </footer>
 
-    <!-- Firebase SDKs -->
+    <!-- ================================================================
+         PHẦN 8: SCRIPTS
+         ================================================================
+         Thứ tự load rất quan trọng do phụ thuộc giữa các module!
+         ================================================================ -->
+
+    <!-- Firebase SDKs (từ CDN) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
-    <!-- App Scripts -->
-    <script src="js/config.js"></script>
-    <script src="js/firebase-config.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/products.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/cart.js"></script>
-    <script src="js/orders.js"></script>
+    <!-- App Scripts (theo thứ tự phụ thuộc) -->
+    <script src="js/config.js"></script> <!-- 1. Cấu hình Firebase (API keys) -->
+    <script src="js/firebase-config.js"></script> <!-- 2. Khởi tạo Firebase App + Services -->
+    <script src="js/auth.js"></script> <!-- 3. Module xác thực (login, register...) -->
+    <script src="js/products.js"></script> <!-- 4. Module sản phẩm (nếu có) -->
+    <script src="js/app.js"></script> <!-- 5. Module chính (render, filter...) -->
+    <script src="js/cart.js"></script> <!-- 6. Module giỏ hàng -->
+    <script src="js/orders.js"></script> <!-- 7. Module đơn hàng -->
 
     <script>
-        // Mobile menu toggle
+        /* ================================================================
+           SCRIPT: TRANG CHỦ
+           ================================================================ */
+
+        /* ----------------------------------------
+           MOBILE MENU TOGGLE
+           ----------------------------------------
+           Bật/tắt menu mobile khi click hamburger button
+           ---------------------------------------- */
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileNav = document.getElementById('mobileNav');
 
@@ -361,14 +514,23 @@
             mobileNav.classList.toggle('active');
         });
 
-        // Close mobile menu on link click
+        /* ----------------------------------------
+           ĐÓNG MOBILE MENU KHI CLICK LINK
+           ----------------------------------------
+           Tự động đóng menu sau khi chọn mục
+           ---------------------------------------- */
         document.querySelectorAll('.mobile-nav-link').forEach(link => {
             link.addEventListener('click', () => {
                 mobileNav.classList.remove('active');
             });
         });
 
-        // Header scroll effect
+        /* ----------------------------------------
+           HEADER SCROLL EFFECT
+           ----------------------------------------
+           Thêm class 'scrolled' khi scroll xuống > 50px
+           Class này thêm shadow và background cho header
+           ---------------------------------------- */
         window.addEventListener('scroll', () => {
             const header = document.getElementById('header');
             if (window.scrollY > 50) {
@@ -378,7 +540,11 @@
             }
         });
 
-        // Smooth scroll for anchor links
+        /* ----------------------------------------
+           SMOOTH SCROLL CHO ANCHOR LINKS
+           ----------------------------------------
+           Cuộn mượt khi click vào link có href="#..."
+           ---------------------------------------- */
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();

@@ -1,162 +1,318 @@
 <!DOCTYPE html>
 <html lang="vi">
+<!--
+================================================================================
+OTO VIỆT - TRANG THANH TOÁN (checkout.html)
+================================================================================
+
+Trang này cho phép người dùng hoàn tất đơn hàng.
+
+CHỨC NĂNG:
+- Hiển thị tóm tắt đơn hàng (từ giỏ hàng)
+- Form nhập thông tin giao hàng (họ tên, SĐT, địa chỉ)
+- Chọn phương thức thanh toán (COD hoặc chuyển khoản)
+- Gọi Orders.createOrder() để lưu đơn hàng vào Firestore
+- Redirect đến profile sau khi đặt hàng thành công
+
+YÊU CẦU:
+- Phải đăng nhập mới được đặt hàng
+- Giỏ hàng phải có ít nhất 1 sản phẩm
+
+================================================================================
+-->
 
 <head>
+    <!-- ===== META TAGS ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thanh toán - OTO VIỆT</title>
+
+    <!-- ===== GOOGLE FONTS ===== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../styles.css">
 
+    <!-- ===== CSS ===== -->
+    <link rel="stylesheet" href="../styles.css">
 </head>
 
 <body>
-    <header class="header">
+    <!-- ================================================================
+         PHẦN 1: HEADER
+         ================================================================ -->
+    <header class="header" id="header">
         <div class="container header-content">
+
+            <!-- Logo -->
             <a href="/" class="logo">
                 <div class="logo-icon">🚗</div><span>OTO VIỆT</span>
             </a>
+
+            <!-- Navigation -->
+            <nav class="nav">
+                <a href="/" class="nav-link">Trang chủ</a>
+                <a href="cart.html" class="nav-link">Giỏ hàng</a>
+            </nav>
+
+            <!-- Header Actions -->
             <div class="header-actions">
-                <a href="cart.html" class="btn btn-ghost btn-sm">← Quay lại giỏ hàng</a>
+                <a href="cart.html" class="cart-btn">🛒<span class="cart-count d-none" id="cartCount">0</span></a>
             </div>
         </div>
     </header>
 
+    <!-- ================================================================
+         PHẦN 2: NỘI DUNG TRANG THANH TOÁN
+         ================================================================ -->
     <section class="checkout-page">
         <div class="container">
-            <h1 class="mb-xl">Thanh toán</h1>
-            <div id="checkoutContent">
-                <div class="checkout-layout">
-                    <div>
-                        <div class="checkout-form">
-                            <h2 class="checkout-title">Thông tin giao hàng</h2>
-                            <div id="alertMessage" class="alert d-none"></div>
-                            <form id="checkoutForm">
-                                <div class="form-group">
-                                    <label class="form-label">Họ và tên *</label>
-                                    <input type="text" id="fullName" class="form-input" placeholder="Nhập họ và tên"
-                                        required autocomplete="name">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Số điện thoại *</label>
-                                    <input type="tel" id="phone" class="form-input" placeholder="Nhập số điện thoại"
-                                        required autocomplete="tel">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Địa chỉ giao hàng *</label>
-                                    <textarea id="address" class="form-textarea" placeholder="Nhập địa chỉ chi tiết"
-                                        required autocomplete="street-address"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Ghi chú</label>
-                                    <textarea id="note" class="form-textarea"
-                                        placeholder="Ghi chú thêm (không bắt buộc)"></textarea>
-                                </div>
-                            </form>
+
+            <!-- Tiêu đề -->
+            <h1 class="page-title">Thanh toán</h1>
+
+            <!-- ===== ALERT MESSAGE ===== -->
+            <div id="alertMessage" class="alert d-none"></div>
+
+            <!-- ===== LAYOUT CHÍNH: 2 CỘT ===== -->
+            <div class="checkout-layout">
+
+                <!-- ================================================
+                     CỘT TRÁI: FORM THÔNG TIN GIAO HÀNG
+                     ================================================ -->
+                <div class="checkout-form">
+                    <div class="form-section">
+                        <h2 class="section-title">Thông tin giao hàng</h2>
+
+                        <!-- Họ và tên -->
+                        <div class="form-group">
+                            <label for="fullName" class="form-label">Họ và tên *</label>
+                            <input type="text" id="fullName" class="form-input" placeholder="Nhập họ và tên người nhận"
+                                required>
                         </div>
 
-                        <div class="checkout-form mt-lg">
-                            <h2 class="checkout-title">Phương thức thanh toán</h2>
-                            <div class="payment-options">
-                                <label class="payment-option selected" onclick="selectPayment(this, 'cash')">
-                                    <input type="radio" name="payment" value="cash" checked>
-                                    <span class="radio"></span>
-                                    <div>
-                                        <strong>💵 Thanh toán khi nhận hàng (COD)</strong>
-                                        <p class="payment-description">Thanh toán
-                                            bằng tiền mặt khi nhận xe</p>
-                                    </div>
-                                </label>
-                                <label class="payment-option" onclick="selectPayment(this, 'bank')">
-                                    <input type="radio" name="payment" value="bank">
-                                    <span class="radio"></span>
-                                    <div>
-                                        <strong>🏦 Chuyển khoản ngân hàng</strong>
-                                        <p class="payment-description">Chuyển
-                                            khoản trước khi giao xe</p>
-                                    </div>
-                                </label>
-                            </div>
+                        <!-- Số điện thoại -->
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Số điện thoại *</label>
+                            <input type="tel" id="phone" class="form-input" placeholder="Nhập số điện thoại" required>
+                        </div>
+
+                        <!-- Địa chỉ -->
+                        <div class="form-group">
+                            <label for="address" class="form-label">Địa chỉ giao hàng *</label>
+                            <textarea id="address" class="form-input form-textarea" placeholder="Nhập địa chỉ chi tiết"
+                                required></textarea>
+                        </div>
+
+                        <!-- Ghi chú -->
+                        <div class="form-group">
+                            <label for="note" class="form-label">Ghi chú</label>
+                            <textarea id="note" class="form-input form-textarea"
+                                placeholder="Ghi chú thêm (nếu có)"></textarea>
                         </div>
                     </div>
 
-                    <div class="cart-summary">
-                        <div class="summary-card">
-                            <h3 class="summary-title">Đơn hàng của bạn</h3>
-                            <div class="order-items-preview" id="orderItemsPreview"></div>
-                            <div class="summary-row mt-lg">
-                                <span>Tạm tính</span>
-                                <span id="subtotal">0đ</span>
-                            </div>
-                            <div class="summary-row">
-                                <span>Phí vận chuyển</span>
-                                <span>Miễn phí</span>
-                            </div>
-                            <div class="summary-row total">
-                                <span>Tổng cộng</span>
-                                <span class="summary-value" id="total">0đ</span>
-                            </div>
-                            <button type="button" class="btn btn-primary w-full btn-lg mt-lg" id="submitOrderBtn"
-                                onclick="submitOrder()">
-                                Đặt hàng
-                            </button>
+                    <!-- ===== CHỌN PHƯƠNG THỨC THANH TOÁN ===== -->
+                    <div class="form-section">
+                        <h2 class="section-title">Phương thức thanh toán</h2>
+
+                        <!-- Option 1: Thanh toán khi nhận xe (COD) -->
+                        <div class="payment-options">
+                            <label class="payment-option active" id="cashOption">
+                                <input type="radio" name="payment" value="cash" checked>
+                                <div class="payment-content">
+                                    <span class="payment-icon">💵</span>
+                                    <div>
+                                        <span class="payment-title">Thanh toán khi nhận xe</span>
+                                        <span class="payment-desc">Thanh toán trực tiếp khi nhận xe</span>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- Option 2: Chuyển khoản ngân hàng -->
+                            <label class="payment-option" id="bankOption">
+                                <input type="radio" name="payment" value="bank">
+                                <div class="payment-content">
+                                    <span class="payment-icon">🏦</span>
+                                    <div>
+                                        <span class="payment-title">Chuyển khoản ngân hàng</span>
+                                        <span class="payment-desc">Chuyển khoản trước khi nhận xe</span>
+                                    </div>
+                                </div>
+                            </label>
                         </div>
+                    </div>
+                </div>
+
+                <!-- ================================================
+                     CỘT PHẢI: TÓM TẮT ĐƠN HÀNG
+                     ================================================ -->
+                <div class="checkout-summary">
+                    <div class="summary-card">
+                        <h3 class="summary-title">Đơn hàng của bạn</h3>
+
+                        <!-- Danh sách sản phẩm (render bằng JS) -->
+                        <div class="summary-items" id="orderItems">
+                            <!-- Mỗi sản phẩm được render thành:
+                            <div class="summary-item">
+                                <img src="..." class="summary-item-image">
+                                <div class="summary-item-info">
+                                    <span class="summary-item-name">Tên xe</span>
+                                    <span class="summary-item-qty">x1</span>
+                                </div>
+                                <span class="summary-item-price">1.000.000đ</span>
+                            </div>
+                            -->
+                        </div>
+
+                        <div class="summary-divider"></div>
+
+                        <!-- Tạm tính -->
+                        <div class="summary-row">
+                            <span>Tạm tính</span>
+                            <span id="subtotal">0đ</span>
+                        </div>
+
+                        <!-- Phí vận chuyển -->
+                        <div class="summary-row">
+                            <span>Phí vận chuyển</span>
+                            <span class="text-success">Miễn phí</span>
+                        </div>
+
+                        <div class="summary-divider"></div>
+
+                        <!-- Tổng cộng -->
+                        <div class="summary-row total">
+                            <span>Tổng cộng</span>
+                            <span class="summary-value" id="total">0đ</span>
+                        </div>
+
+                        <!-- Nút đặt hàng -->
+                        <button id="submitOrderBtn" class="btn btn-primary w-full btn-lg mt-lg" onclick="submitOrder()">
+                            Đặt hàng
+                        </button>
+
+                        <!-- Link quay lại giỏ hàng -->
+                        <a href="cart.html" class="btn btn-ghost w-full mt-sm">
+                            Quay lại giỏ hàng
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- ================================================================
+         PHẦN 3: SCRIPTS
+         ================================================================ -->
+
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- App Scripts -->
     <script src="../js/config.js"></script>
     <script src="../js/firebase-config.js"></script>
     <script src="../js/auth.js"></script>
     <script src="../js/app.js"></script>
     <script src="../js/cart.js"></script>
     <script src="../js/orders.js"></script>
+
     <script>
-        let selectedPayment = 'cash';
+        /* ================================================================
+           SCRIPT: XỬ LÝ TRANG THANH TOÁN
+           ================================================================ */
 
-        function selectPayment(el, method) {
-            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
-            el.classList.add('selected');
-            selectedPayment = method;
-        }
+        /* ----------------------------------------
+           BIẾN LƯU PHƯƠNG THỨC THANH TOÁN ĐƯỢC CHỌN
+           ---------------------------------------- */
+        let selectedPayment = 'cash';  // Mặc định: thanh toán khi nhận xe
 
-        function renderCheckout() {
+        /* ----------------------------------------
+           RENDER TÓM TẮT ĐƠN HÀNG
+           ----------------------------------------
+           Hiển thị danh sách sản phẩm và tổng tiền
+           ---------------------------------------- */
+        function renderOrderSummary() {
             const items = Cart.getItems();
-            if (items.length === 0) { window.location.href = 'cart.html'; return; }
+            const orderItemsEl = document.getElementById('orderItems');
+            const subtotalEl = document.getElementById('subtotal');
+            const totalEl = document.getElementById('total');
 
-            const preview = document.getElementById('orderItemsPreview');
-            preview.innerHTML = items.map(item =>
-                '<div class="order-item-mini"><img src="' + item.image + '" alt=""><div class="order-item-mini-info"><div class="order-item-mini-name">' + item.name + '</div><div class="order-item-mini-price">' + App.formatPriceFull(item.price) + ' x' + item.quantity + '</div></div></div>'
-            ).join('');
+            // Kiểm tra giỏ hàng trống
+            if (items.length === 0) {
+                // Redirect về giỏ hàng nếu trống
+                window.location.href = 'cart.html';
+                return;
+            }
 
-            document.getElementById('subtotal').textContent = App.formatPriceFull(Cart.getTotalPrice());
-            document.getElementById('total').textContent = App.formatPriceFull(Cart.getTotalPrice());
+            // Render danh sách sản phẩm
+            orderItemsEl.innerHTML = items.map(item => `
+                <div class="summary-item">
+                    <img src="${item.image}" alt="${item.name}" class="summary-item-image">
+                    <div class="summary-item-info">
+                        <span class="summary-item-name">${item.name}</span>
+                        <span class="summary-item-qty">x${item.quantity}</span>
+                    </div>
+                    <span class="summary-item-price">${App.formatPriceFull(item.price * item.quantity)}</span>
+                </div>
+            `).join('');
+
+            // Tính và hiển thị tổng tiền
+            const total = Cart.getTotalPrice();
+            subtotalEl.textContent = App.formatPriceFull(total);
+            totalEl.textContent = App.formatPriceFull(total);
         }
 
+        /* ----------------------------------------
+           XỬ LÝ CHỌN PHƯƠNG THỨC THANH TOÁN
+           ---------------------------------------- */
+        function setupPaymentOptions() {
+            const paymentOptions = document.querySelectorAll('.payment-option');
+
+            paymentOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    // Bỏ class active khỏi tất cả options
+                    paymentOptions.forEach(o => o.classList.remove('active'));
+
+                    // Thêm class active vào option được chọn
+                    option.classList.add('active');
+
+                    // Lưu giá trị phương thức thanh toán
+                    selectedPayment = option.querySelector('input').value;
+                });
+            });
+        }
+
+        /* ----------------------------------------
+           XỬ LÝ ĐẶT HÀNG
+           ----------------------------------------
+           Được gọi khi click nút "Đặt hàng"
+           ---------------------------------------- */
         async function submitOrder() {
             const alertEl = document.getElementById('alertMessage');
             const btn = document.getElementById('submitOrderBtn');
 
+            // ===== KIỂM TRA ĐĂNG NHẬP =====
             if (!Auth.isLoggedIn()) {
                 alertEl.className = 'alert alert-warning';
                 alertEl.innerHTML = '⚠️ Vui lòng đăng nhập để đặt hàng';
                 alertEl.style.display = 'flex';
-                setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+
+                // Redirect đến trang login sau 1.5 giây
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
                 return;
             }
 
+            // ===== LẤY THÔNG TIN TỪ FORM =====
             const fullName = document.getElementById('fullName').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const address = document.getElementById('address').value.trim();
             const note = document.getElementById('note').value.trim();
 
+            // ===== VALIDATION =====
             if (!fullName || !phone || !address) {
                 alertEl.className = 'alert alert-error';
                 alertEl.innerHTML = '✕ Vui lòng điền đầy đủ thông tin bắt buộc';
@@ -164,26 +320,45 @@
                 return;
             }
 
+            // ===== DISABLE NÚT VÀ HIỂN THỊ LOADING =====
             btn.disabled = true;
             btn.textContent = 'Đang xử lý...';
 
-            const result = await Orders.createOrder({ fullName, phone, address, note }, selectedPayment);
+            // ===== GỌI API TẠO ĐƠN HÀNG =====
+            const result = await Orders.createOrder(
+                { fullName, phone, address, note },  // Thông tin khách hàng
+                selectedPayment                       // Phương thức thanh toán
+            );
 
             if (result.success) {
+                // ===== ĐẶT HÀNG THÀNH CÔNG =====
                 alertEl.className = 'alert alert-success';
                 alertEl.innerHTML = '✓ Đặt hàng thành công! Mã đơn: ' + result.orderId.slice(-8).toUpperCase();
                 alertEl.style.display = 'flex';
-                setTimeout(() => { window.location.href = 'profile.html'; }, 2000);
+
+                // Redirect đến trang profile sau 2 giây
+                setTimeout(() => {
+                    window.location.href = 'profile.html';
+                }, 2000);
             } else {
+                // ===== ĐẶT HÀNG THẤT BẠI =====
                 alertEl.className = 'alert alert-error';
                 alertEl.innerHTML = '✕ ' + result.error;
                 alertEl.style.display = 'flex';
+
+                // Enable lại nút
                 btn.disabled = false;
                 btn.textContent = 'Đặt hàng';
             }
         }
 
-        document.addEventListener('DOMContentLoaded', renderCheckout);
+        /* ----------------------------------------
+           KHỞI TẠO TRANG
+           ---------------------------------------- */
+        document.addEventListener('DOMContentLoaded', () => {
+            renderOrderSummary();    // Render tóm tắt đơn hàng
+            setupPaymentOptions();   // Gắn sự kiện cho payment options
+        });
     </script>
 </body>
 

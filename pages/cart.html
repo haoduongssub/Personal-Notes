@@ -1,46 +1,98 @@
 <!DOCTYPE html>
 <html lang="vi">
+<!--
+================================================================================
+OTO VIỆT - TRANG GIỎ HÀNG (cart.html)
+================================================================================
+
+Trang này hiển thị danh sách sản phẩm trong giỏ hàng.
+
+CHỨC NĂNG:
+- Hiển thị danh sách xe đã thêm vào giỏ
+- Tăng/Giảm số lượng mỗi sản phẩm
+- Xóa sản phẩm khỏi giỏ
+- Tính tổng tiền tự động
+- Nút "Tiến hành đặt hàng" → checkout.html
+
+DỮ LIỆU:
+- Giỏ hàng lưu trong LocalStorage (key: 'oto_viet_cart')
+- Render bởi Cart.renderCartPage() trong cart.js
+
+================================================================================
+-->
 
 <head>
+    <!-- ===== META TAGS ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giỏ hàng - OTO VIỆT</title>
+
+    <!-- ===== GOOGLE FONTS ===== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- ===== CSS ===== -->
     <link rel="stylesheet" href="../styles.css">
 </head>
 
 <body>
+    <!-- ================================================================
+         PHẦN 1: HEADER
+         ================================================================
+         Thanh điều hướng với logo, menu, giỏ hàng, user menu
+         ================================================================ -->
     <header class="header" id="header">
         <div class="container header-content">
+
+            <!-- Logo -->
             <a href="/" class="logo">
                 <div class="logo-icon">🚗</div><span>OTO VIỆT</span>
             </a>
+
+            <!-- Navigation Links -->
             <nav class="nav">
                 <a href="/" class="nav-link">Trang chủ</a>
                 <a href="/#products" class="nav-link">Xe ô tô</a>
             </nav>
+
+            <!-- Header Actions: Cart + User -->
             <div class="header-actions">
-                <a href="cart.html" class="cart-btn" aria-label="Giỏ hàng">🛒<span class="cart-count d-none"
-                        id="cartCount">0</span></a>
+
+                <!-- Nút giỏ hàng -->
+                <a href="cart.html" class="cart-btn" aria-label="Giỏ hàng">
+                    🛒
+                    <span class="cart-count d-none" id="cartCount">0</span>
+                </a>
+
+                <!-- Menu cho khách (chưa đăng nhập) -->
                 <div id="userMenuGuest" class="d-flex gap-sm">
                     <a href="login.html" class="btn btn-ghost btn-sm">Đăng nhập</a>
                     <a href="register.html" class="btn btn-primary btn-sm">Đăng ký</a>
                 </div>
+
+                <!-- Menu cho user đã đăng nhập -->
                 <div class="user-menu d-none" id="userMenuLoggedIn">
                     <button class="user-btn" aria-label="Menu tài khoản">
-                        <div class="user-avatar" id="userAvatarInitial">A</div><span id="userNameDisplay">User</span>
+                        <div class="user-avatar" id="userAvatarInitial">A</div>
+                        <span id="userNameDisplay">User</span>
                     </button>
                 </div>
             </div>
         </div>
     </header>
 
+    <!-- ================================================================
+         PHẦN 2: NỘI DUNG TRANG GIỎ HÀNG
+         ================================================================ -->
     <section class="cart-page">
         <div class="container">
+
+            <!-- Tiêu đề trang -->
             <h1 class="mb-xl">Giỏ hàng của bạn</h1>
 
+            <!-- ===== TRẠNG THÁI GIỎ HÀNG TRỐNG ===== -->
+            <!-- Hiển thị khi không có sản phẩm nào trong giỏ -->
             <div id="emptyCart" class="empty-state d-none">
                 <div class="empty-icon">🛒</div>
                 <h3 class="empty-title">Giỏ hàng trống</h3>
@@ -48,31 +100,68 @@
                 <a href="/" class="btn btn-primary">Khám phá xe ngay</a>
             </div>
 
+            <!-- ===== LAYOUT CHÍNH: DANH SÁCH + TỔNG TIỀN ===== -->
             <div class="cart-layout">
-                <div class="cart-items" id="cartItems"></div>
 
+                <!-- Cột trái: Danh sách sản phẩm -->
+                <!-- Nội dung được render bởi Cart.renderCartPage() -->
+                <div class="cart-items" id="cartItems">
+                    <!-- 
+                    Mỗi sản phẩm sẽ được render thành:
+                    <div class="cart-item">
+                        <img src="..." class="cart-item-image">
+                        <div class="cart-item-info">
+                            <span class="cart-item-brand">Toyota</span>
+                            <h4 class="cart-item-title">Camry 2024</h4>
+                            <span class="cart-item-price">1.395.000.000 ₫</span>
+                        </div>
+                        <div class="cart-item-actions">
+                            <div class="quantity-control">
+                                <button onclick="Cart.updateQuantity(...)">−</button>
+                                <span>1</span>
+                                <button onclick="Cart.updateQuantity(...)">+</button>
+                            </div>
+                            <button onclick="Cart.removeItem(...)">Xóa</button>
+                        </div>
+                    </div>
+                    -->
+                </div>
+
+                <!-- Cột phải: Tổng đơn hàng -->
                 <div class="cart-summary d-none" id="cartSummary">
                     <div class="summary-card">
                         <h3 class="summary-title">Tổng đơn hàng</h3>
+
+                        <!-- Số lượng sản phẩm -->
                         <div class="summary-row">
                             <span>Số lượng</span>
                             <span id="itemCount">0 sản phẩm</span>
                         </div>
+
+                        <!-- Tạm tính -->
                         <div class="summary-row">
                             <span>Tạm tính</span>
                             <span id="subtotal">0đ</span>
                         </div>
+
+                        <!-- Phí vận chuyển -->
                         <div class="summary-row">
                             <span>Phí vận chuyển</span>
                             <span id="shipping">Miễn phí</span>
                         </div>
+
+                        <!-- Tổng cộng -->
                         <div class="summary-row total">
                             <span>Tổng cộng</span>
                             <span class="summary-value" id="total">0đ</span>
                         </div>
+
+                        <!-- Nút tiến hành đặt hàng -->
                         <a href="checkout.html" class="btn btn-primary w-full btn-lg mt-lg">
                             Tiến hành đặt hàng
                         </a>
+
+                        <!-- Nút tiếp tục mua sắm -->
                         <a href="/" class="btn btn-ghost w-full mt-sm">
                             Tiếp tục mua sắm
                         </a>
@@ -82,14 +171,21 @@
         </div>
     </section>
 
+    <!-- ================================================================
+         PHẦN 3: SCRIPTS
+         ================================================================ -->
+
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="../js/config.js"></script>
-    <script src="../js/firebase-config.js"></script>
-    <script src="../js/auth.js"></script>
-    <script src="../js/app.js"></script>
-    <script src="../js/cart.js"></script>
+
+    <!-- App Scripts (theo thứ tự phụ thuộc) -->
+    <script src="../js/config.js"></script> <!-- 1. Cấu hình Firebase -->
+    <script src="../js/firebase-config.js"></script> <!-- 2. Khởi tạo Firebase -->
+    <script src="../js/auth.js"></script> <!-- 3. Module xác thực -->
+    <script src="../js/app.js"></script> <!-- 4. Module chính (cần cho formatPrice) -->
+    <script src="../js/cart.js"></script> <!-- 5. Module giỏ hàng (tự động render) -->
 </body>
 
 </html>

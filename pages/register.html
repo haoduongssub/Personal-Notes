@@ -1,25 +1,48 @@
 <!DOCTYPE html>
 <html lang="vi">
+<!--
+================================================================================
+OTO VIỆT - TRANG ĐĂNG KÝ (register.html)
+================================================================================
+
+Trang này cho phép người dùng tạo tài khoản mới.
+
+CHỨC NĂNG:
+- Form đăng ký với họ tên, email, mật khẩu
+- Kiểm tra validation (mật khẩu khớp, độ dài...)
+- Checkbox đồng ý điều khoản
+- Gọi Auth.register() để tạo account trên Firebase
+- Tự động redirect nếu đã đăng nhập
+
+================================================================================
+-->
 
 <head>
+    <!-- ===== META TAGS ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Đăng ký tài khoản OTO VIỆT để trải nghiệm mua xe dễ dàng và nhanh chóng.">
     <title>Đăng Ký - OTO VIỆT</title>
 
-    <!-- Google Fonts -->
+    <!-- ===== GOOGLE FONTS ===== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Styles -->
+    <!-- ===== CSS ===== -->
     <link rel="stylesheet" href="../styles.css">
 </head>
 
 <body>
+    <!-- ================================================================
+         PHẦN 1: TRANG ĐĂNG KÝ
+         ================================================================ -->
     <div class="auth-page">
         <div class="auth-container">
+            <!-- Card chứa form đăng ký -->
             <div class="auth-card">
+
+                <!-- ===== HEADER: Logo + Tiêu đề ===== -->
                 <div class="auth-header">
                     <a href="/" class="auth-logo">
                         <div class="logo-icon">🚗</div>
@@ -29,22 +52,27 @@
                     <p class="auth-subtitle">Chỉ mất vài giây để bắt đầu</p>
                 </div>
 
-                <!-- Alert Message -->
+                <!-- ===== ALERT MESSAGE: Hiển thị thông báo lỗi/thành công ===== -->
                 <div id="alertMessage" class="alert d-none"></div>
 
+                <!-- ===== FORM ĐĂNG KÝ ===== -->
                 <form id="registerForm">
+
+                    <!-- Trường Họ và tên -->
                     <div class="form-group">
                         <label for="displayName" class="form-label">Họ và tên</label>
                         <input type="text" id="displayName" class="form-input" placeholder="Nhập họ và tên của bạn"
                             required minlength="2" autocomplete="name">
                     </div>
 
+                    <!-- Trường Email -->
                     <div class="form-group">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" id="email" class="form-input" placeholder="Nhập email của bạn" required
                             autocomplete="email">
                     </div>
 
+                    <!-- Trường Mật khẩu -->
                     <div class="form-group">
                         <label for="password" class="form-label">Mật khẩu</label>
                         <input type="password" id="password" class="form-input" placeholder="Tối thiểu 6 ký tự" required
@@ -52,12 +80,14 @@
                         <span class="form-hint">Mật khẩu phải có ít nhất 6 ký tự</span>
                     </div>
 
+                    <!-- Trường Xác nhận mật khẩu -->
                     <div class="form-group">
                         <label for="confirmPassword" class="form-label">Xác nhận mật khẩu</label>
                         <input type="password" id="confirmPassword" class="form-input" placeholder="Nhập lại mật khẩu"
                             required minlength="6" autocomplete="new-password">
                     </div>
 
+                    <!-- Checkbox đồng ý điều khoản -->
                     <div class="form-group">
                         <label class="form-checkbox">
                             <input type="checkbox" id="agreeTerms" required>
@@ -66,114 +96,152 @@
                         </label>
                     </div>
 
+                    <!-- Nút Submit -->
                     <button type="submit" class="btn btn-primary w-full btn-lg" id="submitBtn">
                         Đăng ký
                     </button>
                 </form>
 
+                <!-- ===== FOOTER: Link đến trang đăng nhập ===== -->
                 <div class="auth-footer">
                     <p>Đã có tài khoản? <a href="login.html">Đăng nhập</a></p>
                 </div>
             </div>
 
+            <!-- Link quay lại trang chủ -->
             <div class="auth-back-link">
                 <a href="/">← Quay lại trang chủ</a>
             </div>
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
+    <!-- ================================================================
+         PHẦN 2: SCRIPTS
+         ================================================================ -->
+
+    <!-- Firebase SDKs (từ CDN) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <!-- App Scripts -->
-    <script src="../js/config.js"></script>
-    <script src="../js/firebase-config.js"></script>
-    <script src="../js/auth.js"></script>
+    <script src="../js/config.js"></script> <!-- Cấu hình Firebase -->
+    <script src="../js/firebase-config.js"></script> <!-- Khởi tạo Firebase -->
+    <script src="../js/auth.js"></script> <!-- Module xác thực -->
 
     <script>
-        // Check if already logged in
+        /* ================================================================
+           SCRIPT: XỬ LÝ ĐĂNG KÝ
+           ================================================================ */
+
+        /* ----------------------------------------
+           KIỂM TRA TRẠNG THÁI ĐĂNG NHẬP
+           ----------------------------------------
+           Nếu đã đăng nhập rồi → redirect về trang chủ
+           ---------------------------------------- */
         auth.onAuthStateChanged((user) => {
             if (user) {
                 window.location.href = '/';
             }
         });
 
-        // Handle register form submission
+        /* ----------------------------------------
+           XỬ LÝ SUBMIT FORM ĐĂNG KÝ
+           ---------------------------------------- */
         const registerForm = document.getElementById('registerForm');
         const alertMessage = document.getElementById('alertMessage');
         const submitBtn = document.getElementById('submitBtn');
 
         registerForm.addEventListener('submit', async (e) => {
+            // Ngăn form submit mặc định
             e.preventDefault();
 
+            // Lấy giá trị từ form
             const displayName = document.getElementById('displayName').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
             const agreeTerms = document.getElementById('agreeTerms').checked;
 
-            // Hide previous alerts
+            // Ẩn thông báo cũ
             alertMessage.style.display = 'none';
 
-            // Validation
+            /* ----------------------------------------
+               VALIDATION
+               ---------------------------------------- */
+
+            // Kiểm tra họ tên
             if (!displayName || displayName.length < 2) {
                 showError('Vui lòng nhập họ và tên hợp lệ');
                 return;
             }
 
+            // Kiểm tra mật khẩu khớp
             if (password !== confirmPassword) {
                 showError('Mật khẩu xác nhận không khớp');
                 return;
             }
 
+            // Kiểm tra độ dài mật khẩu
             if (password.length < 6) {
                 showError('Mật khẩu phải có ít nhất 6 ký tự');
                 return;
             }
 
+            // Kiểm tra checkbox điều khoản
             if (!agreeTerms) {
                 showError('Bạn cần đồng ý với điều khoản sử dụng');
                 return;
             }
 
-            // Disable button and show loading
+            // Disable nút và hiển thị loading
             submitBtn.disabled = true;
             submitBtn.textContent = 'Đang đăng ký...';
 
-            // Attempt registration
+            // Gọi Auth.register() để tạo tài khoản
             const result = await Auth.register(email, password, displayName);
 
             if (result.success) {
+                // ===== ĐĂNG KÝ THÀNH CÔNG =====
                 alertMessage.className = 'alert alert-success';
                 alertMessage.innerHTML = '✓ Đăng ký thành công! Đang chuyển hướng...';
                 alertMessage.style.display = 'flex';
 
+                // Redirect sau 1.5 giây
                 setTimeout(() => {
                     window.location.href = '/';
                 }, 1500);
             } else {
+                // ===== ĐĂNG KÝ THẤT BẠI =====
                 showError(result.error);
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Đăng ký';
             }
         });
 
+        /* ----------------------------------------
+           HÀM HIỂN THỊ LỖI
+           ---------------------------------------- */
         function showError(message) {
             alertMessage.className = 'alert alert-error';
             alertMessage.innerHTML = '✕ ' + message;
             alertMessage.style.display = 'flex';
         }
 
-        // Real-time password confirmation check
+        /* ----------------------------------------
+           KIỂM TRA MẬT KHẨU REALTIME
+           ----------------------------------------
+           Hiển thị viền đỏ nếu mật khẩu xác nhận không khớp
+           ---------------------------------------- */
         const password = document.getElementById('password');
         const confirmPassword = document.getElementById('confirmPassword');
 
         confirmPassword.addEventListener('input', () => {
             if (confirmPassword.value && confirmPassword.value !== password.value) {
+                // Không khớp → viền đỏ
                 confirmPassword.style.borderColor = 'var(--error)';
             } else {
+                // Khớp → viền mặc định
                 confirmPassword.style.borderColor = '';
             }
         });

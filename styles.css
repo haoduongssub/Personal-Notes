@@ -1,4 +1,117 @@
-/* Biến CSS */
+/**
+ * ============================================================================
+ * OTO VIỆT - FILE CSS CHÍNH (styles.css)
+ * ============================================================================
+ * 
+ * File này chứa toàn bộ style cho ứng dụng OTO VIỆT.
+ * Sử dụng CSS Variables để dễ dàng tùy chỉnh theme.
+ * 
+ * ============================================================================
+ * MỤC LỤC (TABLE OF CONTENTS)
+ * ============================================================================
+ * 
+ * 1.  CSS VARIABLES (BIẾN CSS)
+ *     - Màu sắc (Colors)
+ *     - Khoảng cách (Spacing)
+ *     - Bo góc (Border Radius)
+ *     - Đổ bóng (Shadows)
+ *     - Hiệu ứng chuyển (Transitions)
+ *     - Container
+ * 
+ * 2.  RESET & BASE STYLES
+ *     - Box sizing
+ *     - Body styles
+ *     - Typography (h1-h6, p, a...)
+ *     - Images
+ *     - Lists
+ * 
+ * 3.  LAYOUT
+ *     - Container
+ *     - Grid systems
+ *     - Flexbox utilities
+ * 
+ * 4.  HEADER & NAVIGATION
+ *     - Header styles
+ *     - Logo
+ *     - Navigation links
+ *     - Mobile menu
+ *     - User dropdown
+ * 
+ * 5.  BUTTONS
+ *     - .btn (base)
+ *     - .btn-primary, .btn-secondary, .btn-ghost
+ *     - .btn-sm, .btn-lg
+ * 
+ * 6.  FORMS
+ *     - .form-group
+ *     - .form-label
+ *     - .form-input
+ *     - .form-select
+ *     - .form-checkbox
+ * 
+ * 7.  HERO SECTION
+ *     - Hero content
+ *     - Hero stats
+ *     - Hero image
+ * 
+ * 8.  FEATURES SECTION
+ *     - Feature cards
+ *     - Feature icons
+ * 
+ * 9.  PRODUCTS
+ *     - Filter bar
+ *     - Product cards
+ *     - Product badges
+ *     - Product grid
+ * 
+ * 10. CART & CHECKOUT
+ *     - Cart items
+ *     - Cart summary
+ *     - Checkout form
+ *     - Payment options
+ * 
+ * 11. AUTH PAGES (LOGIN/REGISTER)
+ *     - Auth card
+ *     - Auth form
+ *     - Modal
+ * 
+ * 12. PROFILE PAGE
+ *     - Profile header
+ *     - Orders history
+ *     - Order cards
+ * 
+ * 13. FOOTER
+ *     - Footer grid
+ *     - Footer links
+ *     - Social icons
+ * 
+ * 14. UTILITIES
+ *     - Display helpers (d-none, d-flex...)
+ *     - Spacing helpers (mt-lg, mb-xl...)
+ *     - Text helpers (text-center, text-success...)
+ * 
+ * 15. COMPONENTS
+ *     - Alerts
+ *     - Loading spinner
+ *     - Toast notifications
+ *     - Empty state
+ * 
+ * 16. RESPONSIVE (MEDIA QUERIES)
+ *     - Mobile: < 640px
+ *     - Tablet: 640px - 1024px
+ *     - Desktop: > 1024px
+ * 
+ * ============================================================================
+ */
+
+
+/* ============================================================================
+   1. CSS VARIABLES (BIẾN CSS)
+   ============================================================================
+   Định nghĩa tất cả biến CSS để dễ dàng thay đổi theme
+   Sử dụng: var(--tên-biến)
+   ============================================================================ */
+
 :root {
     /* Màu sắc */
     --bg-primary: #0a0a0f;
